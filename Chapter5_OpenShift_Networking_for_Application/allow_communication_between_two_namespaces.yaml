@@ -1,0 +1,44 @@
+
+##This network policy  applies to all pods with the label deployment="myproduct-catalog" in the network-1 namespace. 
+# The policy allows TCP traffic over port 8080 from pods whose label is role="qa" in the network-2 namespace.
+---
+
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: network-1-policy
+spec:
+  podSelector: # 1
+    matchLabels:
+      deployment: myproduct-catolog
+  ingress: #2
+  - from:   #3
+    - namespaceSelector:
+        matchLabels:
+          name: network-2
+      podSelector:
+        matchLabels:
+          role: qa
+    ports:  #4 
+      - port: 8080
+        protocol: TCP
+
+---
+#To manage network communication between two namespaces, assign a label to the namespace
+#that needs access to another namespace. 
+#Following command assigns the name=network-1 label to the network-1 namespace: 
+ ##        oc label namespace network-1 name=network-1 
+
+#1 => This podSelector field is required and defines which pods use the network
+##     policy. If the podSelector is empty, all pods in the namespace are matched.
+
+#2 => The ingress field defines a list of ingress traffic rules to apply to the matched pods from
+##    the top-level podSelector.
+
+#3 => The from field defines a list of rules to match traffic from all sources. The selectors are not
+##    limited to the project in which the network policy is defined. 
+
+#4 => The ports field is a list of destination ports that allow traffic to reach the selected pods.
+
+
+    

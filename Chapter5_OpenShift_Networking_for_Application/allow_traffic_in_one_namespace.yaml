@@ -1,0 +1,18 @@
+---
+# The following network policy allows traffic from all the pods and ports in the network-1
+# namespace to all pods and ports in the network-2 namespace. 
+
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: network-2-policy
+spec:
+  podSelector: {}
+
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: network-1
+              
+    

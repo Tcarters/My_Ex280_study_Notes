@@ -1,0 +1,16 @@
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: allow-same-namespace
+spec:
+  podSelector: {}
+  ingress: 
+  - from:
+      - podSelector: {}
+
+---
+# Only accept connections from pods within a project: 
+
+# This policy  make pods accept connections from other pods in the same project, 
+#   but reject all other connections from pods in other projects
+# 

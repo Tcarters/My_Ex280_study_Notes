@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-from-openshift-ingress
+spec:
+  podSelector: {}
+  ingress:
+    - from:
+        - namespaceSelector: 
+            matchLabels:
+              network.openshift.io/policy-group: ingress
+  policyTypes:
+  - Ingress
+
+
+---
+#  THis policy make a project allowing only connections from the OpenShift Container Platform Ingress Controller
+# 

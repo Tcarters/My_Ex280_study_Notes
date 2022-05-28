@@ -1,0 +1,28 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: sample-route # 1
+  labels:  # 2
+    app: API
+    name: application-frontend
+spec:
+  host: api.apps.example.com   # 3
+  to:
+    kind: Service
+    name: application-frontend  # 4
+  port: # 5
+    targetPort: 8443
+
+---
+# 1  => The name of the route. This name must be unique.
+
+# 2 => A set of labels that you can use as selectors.
+
+# 3 => The host name of the route. This host name must be a subdomain of your wildcard domain
+##      because OpenShift routes the wildcard domain to the routers.
+
+#4 => The service to which to redirect the traffic. Although you use a service name, the route only
+##     uses this information to determine the list of pods that receive the traffic.
+
+# 5 =>  The application port. Because routes bypass services, this must match the application port
+##        and not the service port.
