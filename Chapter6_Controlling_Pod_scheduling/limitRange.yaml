@@ -1,0 +1,69 @@
+---
+## NOte: A limit range, defined by a LimitRange object, restricts resource consumption in a project. 
+##      In the project you can set specific resource limits for a pod, container, image, image stream, or persistent volume claim (PVC). 
+---
+apiVersion: "v1"
+kind: "LimitRange"
+metadata:
+  name: project-limits
+spec:
+  limits:
+  - type: "Pod"
+    max:                #1
+      cpu: "500m"
+      memory: "750Mi"
+    min:                #2
+      cpu: "10m"
+      memory: "5Mi"
+  - type: "Container"
+    max:               #3
+      cpu: "500m"
+      memory: "600Mi"
+    min:              #4
+      cpu: "20m"
+      memory: "5Mi"
+    default:          #5
+      cpu: "10m"
+      memory: "100Mi"
+    defaultRequest:     #6
+      cpu: "20m"
+      memory: "20Mi"
+  - type: openshift.io/Image    #7
+    max:
+      storage: 1Gi
+  - type: openshift.io/ImageStream   #8
+    max:
+      openshift.io/image-tags: 10
+      openshift.io/images: 20
+  - type: "PersistentVolumeClaim"    #9
+    min:
+      storage: "1Gi"
+    max:
+      storage: "60Gi"
+
+---
+ #1 This is the maximum amount of CPU and memory that all containers within a pod can consume.
+
+ #2 This refers to the minimum amount of cpu and memory consumed across all containers within a pod.
+ 
+ #3 This option refers to the max amount of CPU and memory that an individual container within a pod can consume.
+
+ #4 Here is the minimum amount of CPU and memory that an individual container within a pod can consume.
+
+ #5 THis is used when a CPU resource limit and a memory limit is not defined for the container.
+
+ #6 This is the default CPU and memory an individual container can requests.
+ 
+ #7 This deffine the maximum image size that can be pushed to the internal registry.
+
+ #8 The is the maximum number of image tags and versions that an image stream resource can reference.
+
+ #9 THis part dfines the minimum and maximum sizes allowed for a persistent volume claim. 
+
+---
+# To create this resource
+# oc  create --save-config -f project-limits.yaml
+
+# To delete resource
+#  oc delete limitrange project-limits
+

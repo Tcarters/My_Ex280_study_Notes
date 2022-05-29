@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: my-project-quota
+spec:
+  hard:
+    services: "10"
+    cpu: "10mi"
+    memory: "500Mi"
+
+
+## NOte: to create it: oc create --save-config -f sample-quota.yaml
+
+# OR Second way to create resource quota:
+
+# oc create quota my-project-quota --hard services=10,cpu=10mi,memory=500Mi
+
+# oc get resourcequota => to get the quota resource available
+
